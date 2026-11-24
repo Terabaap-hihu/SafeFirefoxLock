@@ -12,45 +12,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Generate Clean Manifest
+      - name: Decode Clean XML Files
         run: |
-          cat << 'EOF' > app/src/main/AndroidManifest.xml
-          <?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="http://android.com">
-              <application
-                  android:allowBackup="false"
-                  android:label="SafeFirefoxLock"
-                  android:theme="@style/Theme.AppCompat.NoActionBar">
-                  <activity
-                      android:name=".MainActivity"
-                      android:exported="true"
-                      android:launchMode="singleTask"
-                      android:excludeFromRecents="true">
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-                      <intent-filter>
-                          <action android:name="android.intent.action.VIEW" />
-                          <category android:name="android.intent.category.DEFAULT" />
-                          <category android:name="android.intent.category.BROWSABLE" />
-                          <data android:scheme="safelock" android:host="trigger120" />
-                      </intent-filter>
-                  </activity>
-                  <service
-                      android:name=".BrowserGuardService"
-                      android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-                      android:exported="true">
-                      <intent-filter>
-                          <action android:name="android.accessibilityservice.AccessibilityService" />
-                      </intent-filter>
-                      <meta-data
-                          android:name="android.accessibilityservice"
-                          android:resource="@xml/service_config" />
-                  </service>
-              </application>
-          </manifest>
-          EOF
+          python3 -c '
+          import base64
+          m = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPG1hbmlmZXN0IHhtbG5zOmFuZHJvaWQ9Imh0dHA6Ly9zY2hlbWFzLmFuZHJvaWQuY29tL2Fway9yZXMvYW5kcm9pZCI+CiAgICA8YXBwbGljYXRpb24gYW5kcm9pZDphbGxvd0JhY2t1cD0iZmFsc2UiIGFuZHJvaWQ6bGFiZWw9IlNhZmVGaXJlZm94TG9jayIgYW5kcm9pZDp0aGVtZT0iQHN0eWxlL1RoZW1lLkFwcENvbXBhdC5Ob0FjdGlvbkJhciI+CiAgICAgICAgPGFjdGl2aXR5IGFuZHJvaWQ6bmFtZT0iLk1haW5BY3Rpdml0eSIgYW5kcm9pZDpleHBvcnRlZD0idHJ1ZSIgYW5kcm9pZDpsYXVuY2hNb2RlPSJzaW5nbGVUYXNrIiBhbmRyb2lkOmV4Y2x1ZGVGcm9tUmVjZW50cz0idHJ1ZSI+CiAgICAgICAgICAgIDxpbnRlbnQtZmlsdGVyPgogICAgICAgICAgICAgICAgPGFjdGlvbiBhbmRyb2lkOm5hbWU9ImFuZHJvaWQuaW50ZW50LmFjdGlvbi5NQUlOIiAvPgogICAgICAgICAgICAgICAgPGNhdGVnb3J5IGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5pbnRlbnQuY2F0ZWdvcnkuTEFVTkNIRVIiIC8+CiAgICAgICAgICAgIDwvaW50ZW50LWZpbHRlcj4KICAgICAgICAgICAgPGludGVudC1maWx0ZXI+CiAgICAgICAgICAgICAgICA8YWN0aW9uIGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5pbnRlbnQuYWN0aW9uLlZJRVciIC8+CiAgICAgICAgICAgICAgICA8Y2F0ZWdvcnkgYW5kcm9pZDpuYW1lPSJhbmRyb2lkLmludGVudC5jYXRlZ29yeS5ERUZBVUxUIiAvPgogICAgICAgICAgICAgICAgPGNhdGVnb3J5IGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5pbnRlbnQuY2F0ZWdvcnkuQlJPV1NBQkxFIiAvPgogICAgICAgICAgICAgICAgPGRhdGEgYW5kcm9pZDpzY2hlbWU9InNhZmVsb2NrIiBhbmRyb2lkOmhvc3Q9InRyaWdnZXIxMjAiIC8+CiAgICAgICAgICAgIDwvaW50ZW50LWZpbHRlcj4KICAgICAgICA8L2FjdGl2aXR5PgogICAgICAgIDxzZXJ2aWNlIGFuZHJvaWQ6bmFtZT0iLkJyb3dzZXJHdWFyZFNlcnZpY2UiIGFuZHJvaWQ6cGVybWlzc2lvbj0iYW5kcm9pZC5wZXJtaXNzaW9uLkJJTkRfQUNDRVNTSUJJTElUWV9TRVJWSUNFIiBhbmRyb2lkOmV4cG9ydGVkPSJ0cnVlIj4KICAgICAgICAgICAgPGludGVudC1maWx0ZXI+CiAgICAgICAgICAgICAgICA8YWN0aW9uIGFuZHJvaWQuYWNjZXNzaWJpbGl0eXNlcnZpY2UuQWNjZXNzaWJpbGl0eVNlcnZpY2UiIC8+CiAgICAgICAgICAgIDwvaW50ZW50LWZpbHRlcj4KICAgICAgICAgICAgPG1ldGEtZGF0YSBhbmRyb2lkOm5hbWU9ImFuZHJvaWQuYWNjZXNzaWJpbGl0eXNlcnZpY2UiIGFuZHJvaWQ6cmVzb3VyY2U9IkB4bWwvc2VydmljZV9jb25maWciIC8+CiAgICAgICAgPC9zZXJ2aWNlPgogICAgPC9hcHBsaWNhdGlvbj4KPC9tYW5pZmVzdD4="
+          s = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPGFjY2Vzc2liaWxpdHktc2VydmljZSB4bWxuczphbmRyb2lkPSJodHRwOi8vc2NoZW1hcy5hbmRyb2lkLmNvbS9hcGsvcmVzL2FuZHJvaWQiIGFuZHJvaWQ6YWNjZXNzaWJpbGl0eUV2ZW50VHlwZXM9InR5cGVXaW5kb3dTdGF0ZUNoYW5nZWQiIGFuZHJvaWQ6YWNjZXNzaWJpbGl0eUZlZWRiYWNrVHlwZT0iZmVlZGJhY2tHZW5lcmljIiBhbmRyb2lkOmNhblJldHJpZXZlV2luZG93Q29udGVudD0iZmFsc2UiIGFuZHJvaWQ6bm90aWZpY2F0aW9uVGltZW91dD0iMTAwIiAvPg=="
+          open("app/src/main/AndroidManifest.xml", "wb").write(base64.b64decode(m))
+          open("app/src/main/res/xml/service_config.xml", "wb").write(base64.b64decode(s))
+          '
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
