@@ -12,14 +12,36 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Decode Clean XML Files
+      - name: Generate Valid Android XML
         run: |
           python3 -c '
-          import base64
-          m = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPG1hbmlmZXN0IHhtbG5zOmFuZHJvaWQ9Imh0dHA6Ly9zY2hlbWFzLmFuZHJvaWQuY29tL2Fway9yZXMvYW5kcm9pZCI+CiAgICA8YXBwbGljYXRpb24gYW5kcm9pZDphbGxvd0JhY2t1cD0iZmFsc2UiIGFuZHJvaWQ6bGFiZWw9IlNhZmVGaXJlZm94TG9jayIgYW5kcm9pZDp0aGVtZT0iQHN0eWxlL1RoZW1lLkFwcENvbXBhdC5Ob0FjdGlvbkJhciI+CiAgICAgICAgPGFjdGl2aXR5IGFuZHJvaWQ6bmFtZT0iLk1haW5BY3Rpdml0eSIgYW5kcm9pZDpleHBvcnRlZD0idHJ1ZSIgYW5kcm9pZDpsYXVuY2hNb2RlPSJzaW5nbGVUYXNrIiBhbmRyb2lkOmV4Y2x1ZGVGcm9tUmVjZW50cz0idHJ1ZSI+CiAgICAgICAgICAgIDxpbnRlbnQtZmlsdGVyPgogICAgICAgICAgICAgICAgPGFjdGlvbiBhbmRyb2lkOm5hbWU9ImFuZHJvaWQuaW50ZW50LmFjdGlvbi5NQUlOIiAvPgogICAgICAgICAgICAgICAgPGNhdGVnb3J5IGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5pbnRlbnQuY2F0ZWdvcnkuTEFVTkNIRVIiIC8+CiAgICAgICAgICAgIDwvaW50ZW50LWZpbHRlcj4KICAgICAgICAgICAgPGludGVudC1maWx0ZXI+CiAgICAgICAgICAgICAgICA8YWN0aW9uIGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5pbnRlbnQuYWN0aW9uLlZJRVciIC8+CiAgICAgICAgICAgICAgICA8Y2F0ZWdvcnkgYW5kcm9pZDpuYW1lPSJhbmRyb2lkLmludGVudC5jYXRlZ29yeS5ERUZBVUxUIiAvPgogICAgICAgICAgICAgICAgPGNhdGVnb3J5IGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5pbnRlbnQuY2F0ZWdvcnkuQlJPV1NBQkxFIiAvPgogICAgICAgICAgICAgICAgPGRhdGEgYW5kcm9pZDpzY2hlbWU9InNhZmVsb2NrIiBhbmRyb2lkOmhvc3Q9InRyaWdnZXIxMjAiIC8+CiAgICAgICAgICAgIDwvaW50ZW50LWZpbHRlcj4KICAgICAgICA8L2FjdGl2aXR5PgogICAgICAgIDxzZXJ2aWNlIGFuZHJvaWQ6bmFtZT0iLkJyb3dzZXJHdWFyZFNlcnZpY2UiIGFuZHJvaWQ6cGVybWlzc2lvbj0iYW5kcm9pZC5wZXJtaXNzaW9uLkJJTkRfQUNDRVNTSUJJTElUWV9TRVJWSUNFIiBhbmRyb2lkOmV4cG9ydGVkPSJ0cnVlIj4KICAgICAgICAgICAgPGludGVudC1maWx0ZXI+CiAgICAgICAgICAgICAgICA8YWN0aW9uIGFuZHJvaWQuYWNjZXNzaWJpbGl0eXNlcnZpY2UuQWNjZXNzaWJpbGl0eVNlcnZpY2UiIC8+CiAgICAgICAgICAgIDwvaW50ZW50LWZpbHRlcj4KICAgICAgICAgICAgPG1ldGEtZGF0YSBhbmRyb2lkOm5hbWU9ImFuZHJvaWQuYWNjZXNzaWJpbGl0eXNlcnZpY2UiIGFuZHJvaWQ6cmVzb3VyY2U9IkB4bWwvc2VydmljZV9jb25maWciIC8+CiAgICAgICAgPC9zZXJ2aWNlPgogICAgPC9hcHBsaWNhdGlvbj4KPC9tYW5pZmVzdD4="
-          s = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPGFjY2Vzc2liaWxpdHktc2VydmljZSB4bWxuczphbmRyb2lkPSJodHRwOi8vc2NoZW1hcy5hbmRyb2lkLmNvbS9hcGsvcmVzL2FuZHJvaWQiIGFuZHJvaWQ6YWNjZXNzaWJpbGl0eUV2ZW50VHlwZXM9InR5cGVXaW5kb3dTdGF0ZUNoYW5nZWQiIGFuZHJvaWQ6YWNjZXNzaWJpbGl0eUZlZWRiYWNrVHlwZT0iZmVlZGJhY2tHZW5lcmljIiBhbmRyb2lkOmNhblJldHJpZXZlV2luZG93Q29udGVudD0iZmFsc2UiIGFuZHJvaWQ6bm90aWZpY2F0aW9uVGltZW91dD0iMTAwIiAvPg=="
-          open("app/src/main/AndroidManifest.xml", "wb").write(base64.b64decode(m))
-          open("app/src/main/res/xml/service_config.xml", "wb").write(base64.b64decode(s))
+          NS = "{http://android.com}"
+          import xml.etree.ElementTree as ET
+          ET.register_namespace("android", "http://android.com")
+
+          m = ET.Element("manifest")
+          app = ET.SubElement(m, "application", {NS+"allowBackup":"false", NS+"label":"SafeFirefoxLock", NS+"theme":"@style/Theme.AppCompat.NoActionBar"})
+          
+          act = ET.SubElement(app, "activity", {NS+"name":".MainActivity", NS+"exported":"true", NS+"launchMode":"singleTask", NS+"excludeFromRecents":"true"})
+          f1 = ET.SubElement(act, "intent-filter")
+          ET.SubElement(f1, "action", {NS+"name":"android.intent.action.MAIN"})
+          ET.SubElement(f1, "category", {NS+"name":"android.intent.category.LAUNCHER"})
+          
+          f2 = ET.SubElement(act, "intent-filter")
+          ET.SubElement(f2, "action", {NS+"name":"android.intent.action.VIEW"})
+          ET.SubElement(f2, "category", {NS+"name":"android.intent.category.DEFAULT"})
+          ET.SubElement(f2, "category", {NS+"name":"android.intent.category.BROWSABLE"})
+          ET.SubElement(f2, "data", {NS+"scheme":"safelock", NS+"host":"trigger120"})
+
+          srv = ET.SubElement(app, "service", {NS+"name":".BrowserGuardService", NS+"permission":"android.permission.BIND_ACCESSIBILITY_SERVICE", NS+"exported":"true"})
+          f3 = ET.SubElement(srv, "intent-filter")
+          ET.SubElement(f3, "action", {NS+"name":"android.accessibilityservice.AccessibilityService"})
+          ET.SubElement(srv, "meta-data", {NS+"name":"android.accessibilityservice", NS+"resource":"@xml/service_config"})
+
+          ET.ElementTree(m).write("app/src/main/AndroidManifest.xml", encoding="utf-8", xml_declaration=True)
+
+          s = ET.Element("accessibility-service", {NS+"accessibilityEventTypes":"typeWindowStateChanged", NS+"accessibilityFeedbackType":"feedbackGeneric", NS+"canRetrieveWindowContent":"false", NS+"notificationTimeout":"100"})
+          ET.ElementTree(s).write("app/src/main/res/xml/service_config.xml", encoding="utf-8", xml_declaration=True)
           '
 
       - name: Set up JDK 17
